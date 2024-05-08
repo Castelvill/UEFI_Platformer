@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+
+#Modified version of https://github.com/rubikshift/UEFI_MARIO/blob/master/levelmaker.py
+
 import argparse
 
 def converter(level, binary):
