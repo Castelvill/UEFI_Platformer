@@ -77,7 +77,7 @@ Source: [_L_C_01_Platform_Build_Linux_Ovmf_Lab.pdf](https://github.com/tianocore
         # . . .
         TOOL_CHAIN_TAG = GCC5
 
-    Save the file and build:
+    Save the file, exit vim and build everything
 
         build
 
@@ -189,7 +189,7 @@ Failed to implement in the game:
 
 ## Binaries
 
-In "bin" folder there are few versions of the same binary file with the game, but with different screen resolutions (mentioned in the file names).
+In "bin" folder there are few versions of the game with different screen resolutions (mentioned in the file names).
 
 ## Game assets
 
@@ -260,7 +260,7 @@ The goal of the game is to reach the castle on the end of a loaded level.
 
 While playing, player can collect coins that turn into a score displayed in the top left corner of the screen. If the player wins, score is also displayed on the end screen.
 
-## Game screenshots
+## Screenshots from the game
 
 <img src="screenshots/1.png" width="500"/>
 
