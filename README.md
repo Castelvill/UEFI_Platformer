@@ -111,45 +111,64 @@ Source: [_L_C_01_Platform_Build_Linux_Ovmf_Lab.pdf](https://github.com/tianocore
 
     The UEFI shell should appear in QEMU
 
-    <img src="screenshots/qemu-works.png" width="500"/>
+    <img src="screenshots/qemu-works.png" width="700"/>
 
-## Build the game
+## Build and run the game
 
-Make folders and copy files from my repository:
+1. Make folders and copy files from my repository:
 
-    cd ~/edk2-ws/edk2
-    mkdir Platformer
-    cd Platformer
-    mkdir MyPkg
-    cd MyPkg
-    cp ~/UEFI_Platformer/src/MyPkg.dec .
-    mkdir Platformer
-    cd Platformer
-    cp ~/UEFI_Platformer/src/Platformer.c .
-    cp ~/UEFI_Platformer/src/Platformer.inf .
+        cd ~/edk2-ws/edk2
+        mkdir Platformer
+        cd Platformer
+        mkdir MyPkg
+        cd MyPkg
+        cp ~/UEFI_Platformer/src/MyPkg.dec .
+        mkdir Platformer
+        cd Platformer
+        cp ~/UEFI_Platformer/src/Platformer.c .
+        cp ~/UEFI_Platformer/src/Platformer.inf .
 
-Open OvmfPkgX64.dsc
+2. Open OvmfPkgX64.dsc
 
-    vim OvmfPkg/OvmfPkgX64.dsc 
+        cd ~/edk2-ws/edk2
+        vim OvmfPkg/OvmfPkgX64.dsc 
 
-Link the game by adding
+3. Link the game by adding the line
     
-    # Add new modules here
-      Platformer/MyPkg/Platformer/Platformer.inf
+        Platformer/MyPkg/Platformer/Platformer.inf
 
-to the end of the opened file. Remember to add two spaces before the second line.
+    to the end of the opened file. Remember to add two spaces before this line.
 
-Save and exit vim.
+4. Save and exit vim.
 
-Copy the "run" script
+5. Copy the "run" script
 
-    cp ~/UEFI_Platformer/src/run .
-    chmod +x run
+        cp ~/UEFI_Platformer/src/run .
+        chmod +x run
 
-Build and run the game with this script
+6. Copy the game assets
 
-    ./run
+        cp -r ~/UEFI_Platformer/images ~/run-ovmf/hda-contents
+        cp -r ~/UEFI_Platformer/levels ~/run-ovmf/hda-contents
 
+7. Build and run the game with this script
+
+        ./run
+
+8. Inside QEMU enter the filesystem
+
+        fs0:
+        ls
+
+    Ls command should return these files:
+
+    <img src="screenshots/qemu-check.png" width="700"/>
+
+9. Run the game
+
+        Platformer.efi
+
+10. Have fun!
 
 ## Running on real hardware
 

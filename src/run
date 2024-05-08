@@ -3,6 +3,6 @@ cd ~/edk2-ws/edk2
 source edksetup.sh
 build
 cd ~/run-ovmf/hda-contents
-cp ~/edk2-ws/edk2/Build/OvmfX64/DEBUG_GCC5/X64/Platformer.efi .
+cp ~/edk2-ws/Build/OvmfX64/DEBUG_GCC5/X64/Platformer.efi .
 cd ..
 . RunQemu.sh
