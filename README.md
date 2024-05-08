@@ -3,22 +3,159 @@ Platformer game written for UEFI Shell.
 
 Project inspired by https://github.com/rubikshift/UEFI_MARIO and written in C with the use of UEFI libraries.
 
-Project uses Edk2 for building the game.
+Project uses Edk II for building the game.
 Game was tested in Qemu with Ovmf.
 
 The game can be run on real hardware (in UEFI shell), but due to not consistent performance and flickering it is recommended to run it in a virtual machine.
 
-## Edk2
+## Setup Edk II, OVMF and QEMU
 
+Source: [_L_C_01_Build_Setup_Download_EDK_II_Linux_Lab.pdf](https://github.com/tianocore-training/Presentation_FW/blob/main/FW/Presentations/_L_C_01_Build_Setup_Download_EDK_II_Linux_Lab.pdf)
 
+1. Install prerequisites
 
-## Qemu
+        sudo apt install build-essential uuid-dev iasl git python-is-python3 qemu-system-x86-64
+
+2. Setup git with your email and username
+3. Create workspace directory
+
+        cd ~
+        mkdir edk2-ws
+
+4. Clone Github repositories with EDK II source code
+
+        cd edk2-ws
+        git clone -b Edk2Lab_22Q3 https://github.com/tianocore-training/edk2.git
+        git clone https://github.com/tianocore/edk2-libc.git
+        git clone https://github.com/tianocore/edk2-platforms.git
+        git clone https://github.com/tianocore/edk2-non-osi.git
+        git clone https://github.com/intel/FSP.git
+
+5. Clone the EDK II Submodules
+
+        cd edk2
+        git submodule update --init
+        cd ..
+        cd edk2-platforms
+        git reset --hard c546cc01f1517b42470f3ae44d67efcb8ee257fc
+
+6. Clone Lab Material
+
+        git clone https://github.com/tianocore-training/Lab_Material_FW.git
+        cp -r Lab_Material_FW/FW/edk2-ws/ ../
+
+7. Set ENV vars
+
+        source setenv.sh
+        env | grep -e WORKSPACE -e PACKAGES_PATH
+
+8. Compile BaseTools
+
+        cd edk2
+        make -C BaseTools/
+
+Source: [_L_C_01_Platform_Build_Linux_Ovmf_Lab.pdf](https://github.com/tianocore-training/Presentation_FW/blob/main/FW/Presentations/_L_C_01_Platform_Build_Linux_Ovmf_Lab.pdf)
+
+9. Download general-purpose x86 assembler
+    
+        sudo apt install nasm
+
+10. Build OVMF (Open Virtual Machine Firmware) with EDK II
+
+        cd ~/edk2-ws/edk2
+        source edksetup.sh
+
+    Edit "Conf/target.txt"
+
+        vim Conf/target.txt
+
+    Make changes
+        
+        ACTIVE_PLATFORM = OvmfPkg/OvmfPkgX64.dsc
+        # . . .
+        TARGET_ARCH = X64
+        # . . .
+        TOOL_CHAIN_TAG = GCC5
+
+    Save the file and build:
+
+        build
+
+11. Create QEMU Run Script
+    
+        cd ~
+        mkdir run-ovmf
+        cd run-ovmf
+
+    Create a directory to use as a hard disk image for the virtual machine
+
+        mkdir hda-contents
+
+    Create "RunQemu.sh" script
+
+        vim RunQemu.sh
+
+    Copy this command inside the script
+
+        qemu-system-x86_64 -drive file=bios.bin,format=raw,if=pflash -drive file=fat:rw:hda-contents,format=raw -net none -debugcon file:debug.log -global isa-debugcon.iobase=0x402 -display gtk,grab-on-hover=off,show-cursor=on,window-close=on
+
+    Save the script and exit vim.
+
+    Copy the OVMF binary that we build
+    
+        cp ~/edk2-ws/Build/OvmfX64/DEBUG_GCC5/FV/OVMF.fd ./bios.bin
+
+    Test if everything works
+
+        sh RunQemu.sh
+
+    The UEFI shell should appear in QEMU
+
+    <img src="screenshots/qemu-works.png" width="500"/>
+
+## Build the game
+
+Make folders and copy files from my repository:
+
+    cd ~/edk2-ws/edk2
+    mkdir Platformer
+    cd Platformer
+    mkdir MyPkg
+    cd MyPkg
+    cp ~/UEFI_Platformer/src/MyPkg.dec .
+    mkdir Platformer
+    cd Platformer
+    cp ~/UEFI_Platformer/src/Platformer.c .
+    cp ~/UEFI_Platformer/src/Platformer.inf .
+
+Open OvmfPkgX64.dsc
+
+    vim OvmfPkg/OvmfPkgX64.dsc 
+
+Link the game by adding
+    
+    # Add new modules here
+      Platformer/MyPkg/Platformer/Platformer.inf
+
+to the end of the opened file. Remember to add two spaces before the second line.
+
+Save and exit vim.
+
+Copy the "run" script
+
+    cp ~/UEFI_Platformer/src/run .
+    chmod +x run
+
+Build and run the game with this script
+
+    ./run
+
 
 ## Running on real hardware
 
-In order to run this game on real hardware you need to create a bootable pendrive with uefi shell, game binary and other game assets.
+In order to run this game on real hardware you need to create a bootable pendrive with uefi shell and copy the game binary with other game assets.
 
-## UEFI functionalities
+## Implemented UEFI functionalities
 
 Implemented in the game:
 - Drawing on the screen with **Blt** function from "Protocol/GraphicsOutput.h".  (UEFI Spec. 2.10., page 426.)
@@ -33,7 +170,7 @@ Failed to implement in the game:
 
 ## Binaries
 
-In "binaries" folder there are few versions of the same binary file with the game, but with different screen resolutions (mentioned in the file names).
+In "bin" folder there are few versions of the same binary file with the game, but with different screen resolutions (mentioned in the file names).
 
 ## Game assets
 
