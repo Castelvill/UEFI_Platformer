@@ -8,6 +8,12 @@ Game was tested in Qemu with Ovmf.
 
 The game can be run on real hardware (in UEFI shell), but due to not consistent performance and flickering it is recommended to run it in a virtual machine.
 
+## Authors
+
+Mateusz Matkowski
+
+Mikołaj Starzak
+
 ## Setup Edk II, OVMF and QEMU
 
 Source: [_L_C_01_Build_Setup_Download_EDK_II_Linux_Lab.pdf](https://github.com/tianocore-training/Presentation_FW/blob/main/FW/Presentations/_L_C_01_Build_Setup_Download_EDK_II_Linux_Lab.pdf)
