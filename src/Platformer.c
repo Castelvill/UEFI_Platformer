@@ -517,6 +517,7 @@ void useMouseInput(PlayerStruct * Player, GameStruct * Game, CameraStruct * Came
 	//Move the mouse.
 	Game->mouseX += MouseState.RelativeMovementX;
 	Game->mouseY += MouseState.RelativeMovementY;
+	Game->isMouseMoving = TRUE;
 	
 	if(MouseState.LeftButton){ //If the left mouse button is pressed, trigger a jump
 		if(!Player->isJumping && !Player->isFalling){
@@ -530,7 +531,7 @@ void useMouseInput(PlayerStruct * Player, GameStruct * Game, CameraStruct * Came
 			}
 		}
 	}
-	else if(MouseState.RightButton && Game->showMouseCursor){ //If the right mouse button is pressed teleport player to the mouse cursor.
+	if(MouseState.RightButton){ //If the right mouse button is pressed teleport player to the mouse cursor.
 		Player->Base.pos.x = Game->mouseX + Camera->pos.x;
 		Player->Base.pos.y = Game->mouseY + Camera->pos.y;
 		if(Player->Base.pos.x < 0){
